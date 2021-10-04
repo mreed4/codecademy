@@ -24,11 +24,13 @@ const mystery5 = [4, 9, 1, 3, 5, 4, 0, 4, 6, 3, 0, 7, 2, 5, 2, 3];
 const batch = [valid1, valid2, valid3, valid4, valid5, invalid1, invalid2, invalid3, invalid4, invalid5, mystery1, mystery2, mystery3, mystery4, mystery5];
 
 
-// Add your functions below:
+// This takes in an array of numbers, and returns a boolean value
 const validateCard = card => {
 
     // https://content.codecademy.com/PRO/independent-practice-projects/credit-card-checker/diagrams/cc%20validator%20diagram%201.svg
 
+    // Calculated using the Luhn algorithm as demonstrated above,
+    // this reduces the given array, 'card', to a single number
     let luhnNumber = card
         .reverse()
         .map((n, i) => {
@@ -46,27 +48,39 @@ const validateCard = card => {
         .reverse()
         .reduce((a, b) => a + b);
 
+    // Once we have the single number from above, test it
+    // This returns a boolean value
     let isValid = luhnNumber % 10 === 0;
 
     return isValid;
 
 }
 
+// This returns an array of arrays ('cards'), but only if the cards are invalid
+// The list of all cards is set in `batch`, on Line 24
 const findInvalidCards = cards => {
 
     return cards
-        /* Returns bool outcome for each array 
+        // The commented code returns a boolean value for each card
+        /*
         i.e. [true, true, false] ...
         .map(n => validateCred(n))
         .filter(n => n === false);
         */
+
+    //  The below code will return the arrays where the card number is 
+    //  NOT valid, i.e. where validateCard() returns false
         .filter(n => validateCard(n) === false)
         .map(n => n.reverse());
 
 }
 
+// This maps each invalid card to the issuing bank or lender, depending on the 
+// first number of each card
+// Again, all cards at this point are "invalid"
 const invalidCardCompanies = cards => {
 
+    // Map based on an object
     let companies = cards
         .map(card => {
             let company = {
@@ -79,6 +93,7 @@ const invalidCardCompanies = cards => {
             // https://stackoverflow.com/a/9004058/15986695
         });
 
+    // "Remove duplicates"
     return [...new Set(companies)];
 
 }
