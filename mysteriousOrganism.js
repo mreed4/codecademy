@@ -10,5 +10,7 @@ const mockUpStrand = () => {
     for (let i = 0; i < 15; i++) {
         newStrand.push(returnRandBase())
     }
-    return newStrand
+    return newStrand.join('');
 }
+
+console.log(mockUpStrand());
