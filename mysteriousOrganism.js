@@ -1,63 +1,63 @@
 // Returns a random DNA base
 const returnRandBase = () => {
-    const dnaBases = ['A', 'T', 'C', 'G']
-    return dnaBases[Math.floor(Math.random() * 4)]
+    const dnaBases = ['A', 'T', 'C', 'G'];
+    return dnaBases[Math.floor(Math.random() * 4)];
 }
 
 // Returns a random single stand of DNA containing 15 bases
 const mockUpStrand = () => {
-    const newStrand = []
+    const newStrand = [];
     for (let i = 0; i < 15; i++) {
-        newStrand.push(returnRandBase())
+        newStrand.push(returnRandBase());
     }
-    return newStrand.join('');
+    return newStrand;
 }
 
-let test = mockUpStrand();
-console.log(test);
-
 // Begin code
-const pAequorFactory = (n = 1, base) => {
+const pAequorFactory = (n = 1, strand) => {
     return {
         specimenNum: n,
-        dna: base,
+        dna: strand,
         mutate() {
-            let randBase = Math.floor(Math.random() * base.length);
-            let toChange = this.dna[randBase];
-            /*
-            for (let i = 0; i < base.length; i++) {
-                let toChange = this.dna[i];
 
-                let b = Math.floor(Math.random() * 3)
-                let swapBase = {
-                    a: {
-                        1: 'T',
-                        2: 'C',
-                        3: 'G'
-                    },
-                    t: {
-                        1: 'A',
-                        2: 'C',
-                        3: 'G'
-                    },
-                    c: {
-                        1: 'A',
-                        2: 'T',
-                        3: 'G'
-                    },
-                    g: {
-                        1: 'A',
-                        2: 'T',
-                        3: 'C'
-                    }
+            let randNum = Math.floor(Math.random() * strand.length);
+            let oldBase = this.dna[randNum];
+
+            let i = Math.floor(Math.random() * 3) + 1;
+            let swapBase = {
+
+                A: {
+                    1: 'T',
+                    2: 'C',
+                    3: 'G'
+                },
+                T: {
+                    1: 'A',
+                    2: 'C',
+                    3: 'G'
+                },
+                C: {
+                    1: 'A',
+                    2: 'T',
+                    3: 'G'
+                },
+                G: {
+                    1: 'A',
+                    2: 'T',
+                    3: 'C'
                 }
-                toChange = swapBase[toChange][b];
 
             }
-            */
-            return `${toChange} i is ${randBase} `;
+
+            let newBase = swapBase[oldBase][i];
+            this.dna[randNum] = newBase;
+
+            return strand; // This is the mutated strand
+
         }
     }
 }
 
-console.log(pAequorFactory(1, test).mutate());
+let test = pAequorFactory(1, mockUpStrand()).mutate();
+
+console.log(test);
