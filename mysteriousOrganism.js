@@ -55,7 +55,7 @@ const pAequorFactory = (n = 1, strand) => {
 
             /*
             The randomly chosen base from Line 54 is used in conjunction
-            with the 'swapBase' object farther above, i.e. if Line 54 is 'A',
+            with the 'swapBase' object farther above--i.e. if Line 54 is 'A',
             'A' turns into either 'T', 'C', or 'G' (but not 'A' again). Or, 
             for example, if Line 54 is 'C', 'C' turns into either 'A', 'T', 
             or 'G' (but not 'C' again). What the randomly given base turns 
