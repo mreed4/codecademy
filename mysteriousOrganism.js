@@ -13,6 +13,9 @@ const mockUpStrand = () => {
     return newStrand;
 }
 
+let dna = mockUpStrand();
+console.log(dna.join(''));
+
 // Begin code
 const pAequorFactory = (n = 1, strand) => {
     return {
@@ -20,11 +23,7 @@ const pAequorFactory = (n = 1, strand) => {
         dna: strand,
         mutate() {
 
-            let randNum = Math.floor(Math.random() * strand.length);
-            let oldBase = this.dna[randNum];
-
-            let i = Math.floor(Math.random() * 3) + 1;
-            let swapBase = {
+            let swapBase = { // See Line 57 comments
 
                 A: {
                     1: 'T',
@@ -49,15 +48,34 @@ const pAequorFactory = (n = 1, strand) => {
 
             }
 
-            let newBase = swapBase[oldBase][i];
-            this.dna[randNum] = newBase;
+            // Random base from given strand
+            // i.e. A, T, C, or G
+            let i = Math.floor(Math.random() * strand.length);
+            let oldBase = this.dna[i];
+
+            /*
+            The randomly chosen base from Line 54 is used in conjunction
+            with the 'swapBase' object farther above, i.e. if Line 54 is 'A',
+            'A' turns into either 'T', 'C', or 'G' (but not 'A' again). Or, 
+            for example, if Line 54 is 'C', 'C' turns into either 'A', 'T', 
+            or 'G' (but not 'C' again). What the randomly given base turns 
+            into is also random.
+            */
+            let j = Math.floor(Math.random() * 3) + 1;
+            let newBase = swapBase[oldBase][j];
+
+            // Replace oldBase (e.g. 'A') with newBase (e.g. "T", 'C', or 'G')
+            this.dna[i] = newBase;
 
             return strand; // This is the mutated strand
+
+        },
+        compareDNA() {
 
         }
     }
 }
 
-let test = pAequorFactory(1, mockUpStrand()).mutate();
 
-console.log(test);
+let dnaMutated = pAequorFactory(1, dna).mutate();
+console.log(dnaMutated.join(''));
