@@ -4,7 +4,10 @@ const returnRandBase = () => {
     return dnaBases[Math.floor(Math.random() * 4)];
 }
 
-// Returns a random single stand of DNA containing 15 bases
+/*
+Returns a single stand of DNA containing 15 bases (again, each chosen)
+at random
+*/
 const mockUpStrand = () => {
     const newStrand = [];
     for (let i = 0; i < 15; i++) {
@@ -13,10 +16,8 @@ const mockUpStrand = () => {
     return newStrand;
 }
 
-let dna = mockUpStrand();
-console.log(dna.join(''));
+let strand1 = mockUpStrand();
 
-// Begin code
 const pAequorFactory = (n = 1, strand) => {
     return {
         specimenNum: n,
@@ -49,22 +50,24 @@ const pAequorFactory = (n = 1, strand) => {
             }
 
             // Random base from given strand
-            // i.e. A, T, C, or G
+            // i.e. 'A', 'T', 'C', or 'G'
             let i = Math.floor(Math.random() * strand.length);
             let oldBase = this.dna[i];
 
             /*
-            The randomly chosen base from Line 54 is used in conjunction
+            The randomly chosen base from Line 55 is used here in conjunction
             with the 'swapBase' object farther above--i.e. if Line 54 is 'A',
             'A' turns into either 'T', 'C', or 'G' (but not 'A' again). Or, 
-            for example, if Line 54 is 'C', 'C' turns into either 'A', 'T', 
+            for example, if Line 55 is 'C', 'C' turns into either 'A', 'T', 
             or 'G' (but not 'C' again). What the randomly given base turns 
             into is also random.
             */
             let j = Math.floor(Math.random() * 3) + 1;
             let newBase = swapBase[oldBase][j];
 
-            // Replace oldBase (e.g. 'A') with newBase (e.g. "T", 'C', or 'G')
+            /*
+            Replace random oldBase (e.g. 'A') in given strand with random newBase (e.g. 'T', 'C', or 'G')
+            */
             this.dna[i] = newBase;
 
             return strand; // This is the mutated strand
@@ -77,5 +80,5 @@ const pAequorFactory = (n = 1, strand) => {
 }
 
 
-let dnaMutated = pAequorFactory(1, dna).mutate();
-console.log(dnaMutated.join(''));
+let pAequor1 = pAequorFactory(1, strand1);
+console.log(pAequor1);
