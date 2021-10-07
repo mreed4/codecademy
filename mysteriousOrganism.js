@@ -74,18 +74,25 @@ const pAequorFactory = (n = 1, strand) => {
             return strand.join(''); // This is the mutated strand
 
         },
-        compareDNA(pAequor) {
+        compareDNA(pAequor, set = false) {
 
-            let specA_DNA = this.dna;
-            let specB_DNA = pAequor.dna;
+            let specA_DNA = this.dna; // This is the 'current' strand
+            let specB_DNA = pAequor.dna; // This is the passed in strand
+
+            // Specimen numbers
             let specA_Num = this.specimenNum; // => 1, 2, 3, ...
             let specB_Num = pAequor.specimenNum; // => 1, 2, 3, ...
+
             let commonBase = 0; // Initialize counter
+
             let divisor = this.dna.length; // => 15
 
             /*
             This will loop through the strands and count each time the bases
-            are at the same location in both strands, and have the same value
+            are at the same location in both strands, and have the same value.
+            i.e., if 'A' is at strand1[7], and at strand2[7], `commonBase` will
+            increase by one. If 'A' is at strand1[7], but if 'G' is at 
+            strand2[7], 'commonBase' will NOT increase by one.
             */
             for (let base in this.dna) {
                 if (specA_DNA[base] === specB_DNA[base]) {
@@ -94,38 +101,52 @@ const pAequorFactory = (n = 1, strand) => {
             }
 
             // Calculates the percentage they are similar
-            let percentSimilar = +((commonBase / divisor) * 100).toFixed(2);
+            // Typecasts to number from string
+            let percentSimilar = ((commonBase / divisor) * 100).toFixed(2);
 
-            /*
-            let tenths = percentSimilar[percentSimilar.length - 2];
-            let hundredths = percentSimilar[percentSimilar.length - 1];
-            let prettyNum = true;
-
-            /*
-            IF ENABLED, this will convert what _should be_ an integer to an
-            integer. For example, this will turn '40.00' to '40'. It will also
-            add a leading zero to a number that is less than 10. The values are
-            typecasted into numbers.
-            /*
-            /*
-            if (prettyNum) {
-                if (tenths === '0' && hundredths === '0') {
-                    percentSimilar = +percentSimilar.slice(0, 2);
-                }
-            } else if (percentSimilar.length === 4) {
-                percentSimilar = '0' + percentSimilar;
-            }
+            /* 
+            This conditional will either return an array of strings that (a) 
+            look like numbers, (b) an array of numbers, or (c) a string
             */
+            let uniformNum = true;
+            if (set && uniformNum) {
 
-            let string1 = `Spec. ${specA_Num} and Spec. ${specB_Num} have `;
-            let string2 = `${percentSimilar}% DNA in common.`
-            let message = string1 + string2;
+                if (percentSimilar.length === 4) {
+                    percentSimilar = '0' + percentSimilar;
+                }
 
-            console.log(message);
-            // return percentSimilar;
+                return percentSimilar;
+
+            } else if (set) {
+
+                percentSimilar = +percentSimilar;
+
+                return percentSimilar;
+
+            } else {
+
+                percentSimilar = +percentSimilar;
+
+                let s1 = `=> Spec. ${specA_Num} and Spec. ${specB_Num} have `;
+                let s2 = `${percentSimilar}% DNA in common.`
+                let message = s1 + s2;
+
+                return message;
+            }
 
         },
         willLikelySurvive() {
+
+            let strand = this.dna;
+            let strandCG = strand.replace(/A|T/g, '');
+            let countCG = strandCG.length;
+            let percentCG = Math.round((countCG / strand.length) * 100);
+            let survival = percentCG > 60;
+
+            return survival;
+
+        },
+        complementStrand() {
 
         }
     }
@@ -133,19 +154,17 @@ const pAequorFactory = (n = 1, strand) => {
 
 let pAequor1 = pAequorFactory(1, strand1);
 let pAequor2 = pAequorFactory(2, strand2);
-// console.log(`Mutator: ${pAequor1.dna} mutated to ${pAequor1.mutate()}`);
-// console.log(`Mutator: ${pAequor2.dna} mutated to ${pAequor2.mutate()}`);
+// console.log(pAequor1.compareDNA(pAequor2, false));
 
-pAequor1.compareDNA(pAequor2);
-
-/*
-let arr = [];
-
-for (let i = 0; i <= 16; i++) {
-    let pAequor1 = pAequorFactory(1, mockUpStrand());
-    let pAequor2 = pAequorFactory(2, mockUpStrand());
-    arr.push(pAequor1.compareDNA(pAequor2));
+let arr = []
+for (let i = 0; i <= 30; i++) {
+    let pAequor = pAequorFactory(i, mockUpStrand());
+    arr.push(
+        [
+            pAequor.specimenNum,
+            pAequor.dna,
+            // pAequor.mutate(),
+            pAequor.willLikelySurvive()
+        ]);
 }
-
 console.log(arr);
-*/
