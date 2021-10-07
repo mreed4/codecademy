@@ -84,8 +84,8 @@ const pAequorFactory = (n = 1, strand) => {
             let divisor = this.dna.length; // => 15
 
             /*
-            This will loop through the stands and count each time the bases
-            are at the same location with the same value
+            This will loop through the strands and count each time the bases
+            are at the same location in both strands, and have the same value
             */
             for (let base in this.dna) {
                 if (specA_DNA[base] === specB_DNA[base]) {
@@ -93,6 +93,7 @@ const pAequorFactory = (n = 1, strand) => {
                 }
             }
 
+            // Calculates the percentage they are similar
             let percentSimilar = +((commonBase / divisor) * 100).toFixed(2);
 
             /*
@@ -118,9 +119,11 @@ const pAequorFactory = (n = 1, strand) => {
 
             let string1 = `Spec. ${specA_Num} and Spec. ${specB_Num} have `;
             let string2 = `${percentSimilar}% DNA in common.`
+            let message = string1 + string2;
 
-            console.log(string1 + string2);
+            console.log(message);
             // return percentSimilar;
+
         },
         willLikelySurvive() {
 
