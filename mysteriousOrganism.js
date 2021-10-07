@@ -17,11 +17,12 @@ const mockUpStrand = () => {
 }
 
 let strand1 = mockUpStrand();
+let strand2 = mockUpStrand();
 
 const pAequorFactory = (n = 1, strand) => {
     return {
         specimenNum: n,
-        dna: strand,
+        dna: strand.join(''),
         mutate() {
 
             let swapBase = { // See Line 57 comments
@@ -70,15 +71,78 @@ const pAequorFactory = (n = 1, strand) => {
             */
             this.dna[i] = newBase;
 
-            return strand; // This is the mutated strand
+            return strand.join(''); // This is the mutated strand
 
         },
-        compareDNA() {
+        compareDNA(pAequor) {
+
+            let specA_DNA = this.dna;
+            let specB_DNA = pAequor.dna;
+            let specA_Num = this.specimenNum; // => 1, 2, 3, ...
+            let specB_Num = pAequor.specimenNum; // => 1, 2, 3, ...
+            let commonBase = 0; // Initialize counter
+            let divisor = this.dna.length; // => 15
+
+            /*
+            This will loop through the stands and count each time the bases
+            are at the same location with the same value
+            */
+            for (let base in this.dna) {
+                if (specA_DNA[base] === specB_DNA[base]) {
+                    commonBase += 1;
+                }
+            }
+
+            let percentSimilar = +((commonBase / divisor) * 100).toFixed(2);
+
+            /*
+            let tenths = percentSimilar[percentSimilar.length - 2];
+            let hundredths = percentSimilar[percentSimilar.length - 1];
+            let prettyNum = true;
+
+            /*
+            IF ENABLED, this will convert what _should be_ an integer to an
+            integer. For example, this will turn '40.00' to '40'. It will also
+            add a leading zero to a number that is less than 10. The values are
+            typecasted into numbers.
+            /*
+            /*
+            if (prettyNum) {
+                if (tenths === '0' && hundredths === '0') {
+                    percentSimilar = +percentSimilar.slice(0, 2);
+                }
+            } else if (percentSimilar.length === 4) {
+                percentSimilar = '0' + percentSimilar;
+            }
+            */
+
+            let string1 = `Spec. ${specA_Num} and Spec. ${specB_Num} have `;
+            let string2 = `${percentSimilar}% DNA in common.`
+
+            console.log(string1 + string2);
+            // return percentSimilar;
+        },
+        willLikelySurvive() {
 
         }
     }
 }
 
-
 let pAequor1 = pAequorFactory(1, strand1);
-console.log(pAequor1);
+let pAequor2 = pAequorFactory(2, strand2);
+// console.log(`Mutator: ${pAequor1.dna} mutated to ${pAequor1.mutate()}`);
+// console.log(`Mutator: ${pAequor2.dna} mutated to ${pAequor2.mutate()}`);
+
+pAequor1.compareDNA(pAequor2);
+
+/*
+let arr = [];
+
+for (let i = 0; i <= 16; i++) {
+    let pAequor1 = pAequorFactory(1, mockUpStrand());
+    let pAequor2 = pAequorFactory(2, mockUpStrand());
+    arr.push(pAequor1.compareDNA(pAequor2));
+}
+
+console.log(arr);
+*/
