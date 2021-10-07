@@ -148,6 +148,23 @@ const pAequorFactory = (n = 1, strand) => {
         },
         complementStrand() {
 
+            let strand = this.dna;
+
+            let complementBases = {
+                'A': 'T',
+                'T': 'A',
+                'C': 'G',
+                'G': 'C'
+            };
+
+            let swapArr = [];
+
+            for (let i = 0; i < strand.length; i++) {
+                swapArr.push(complementBases[strand[i]]);
+            }
+
+            return swapArr.join('');
+
         }
     }
 }
@@ -164,7 +181,8 @@ for (let i = 0; i <= 30; i++) {
             pAequor.specimenNum,
             pAequor.dna,
             // pAequor.mutate(),
-            pAequor.willLikelySurvive()
+            pAequor.willLikelySurvive(),
+            pAequor.complementStrand()
         ]);
 }
 console.log(arr);
