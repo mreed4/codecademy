@@ -1,3 +1,9 @@
+/*
+
+    Code provided by the exercise/project
+
+*/
+
 // Returns a random DNA base
 const returnRandBase = () => {
     const dnaBases = ['A', 'T', 'C', 'G'];
@@ -16,7 +22,13 @@ const mockUpStrand = () => {
     return newStrand.join('');
 }
 
-let strand2 = mockUpStrand();
+
+
+/*
+
+    My object and code
+
+*/
 
 const pAequorFactory = (n = 1, strand) => {
     return {
@@ -69,23 +81,18 @@ const pAequorFactory = (n = 1, strand) => {
         },
         compareDNA(pAequor, message = false) {
 
-            let specA_DNA = this.dna; // This is the 'current' strand
-            let specB_DNA = pAequor.dna; // This is the passed in strand
+            let specA_DNA = this.dna;
+            let specB_DNA = pAequor.dna;
+            let specA_Num = this.specimenNum;
+            let specB_Num = pAequor.specimenNum;
 
-            // Specimen numbers
-            let specA_Num = this.specimenNum; // => 1, 2, 3, ...
-            let specB_Num = pAequor.specimenNum; // => 1, 2, 3, ...
-
-            let commonBase = 0; // Initialize counter
+            let commonBase = 0;
 
             let divisor = this.dna.length; // => 15
 
             /*
             This will loop through the strands and count each time the bases
             are at the same location in both strands, and have the same value.
-            i.e., if 'A' is at strand1[7], and at strand2[7], `commonBase` will
-            increase by one. If 'A' is at strand1[7], but if 'G' is at 
-            strand2[7], 'commonBase' will NOT increase by one.
             */
             for (let base in this.dna) {
                 if (specA_DNA[base] === specB_DNA[base]) {
@@ -93,35 +100,43 @@ const pAequorFactory = (n = 1, strand) => {
                 }
             }
 
-            // Calculates the percentage they are similar
-            // Typecasts to number from string
             let percentSimilar = ((commonBase / divisor) * 100).toFixed(2);
 
             if (message) {
 
                 percentSimilar = +percentSimilar;
 
-                let s1 = `=> Spec. ${specA_Num} and Spec. ${specB_Num} have `;
-                let s2 = `${percentSimilar}% DNA in common.`
+                let s1 = `Spec. ${specA_Num} and Spec. ${specB_Num} have `;
+                let s2 = `${percentSimilar}% commonality in their DNA`;
                 let message = s1 + s2;
 
                 return message;
 
             } else {
 
-                return `${percentSimilar}%`;
+                return +percentSimilar; // => n
 
             }
 
         },
-        willLikelySurvive() {
+        willLikelySurvive(message = false) {
 
             let strandCG = this.dna.replace(/A|T/g, '');
             let countCG = strandCG.length;
             let percentCG = Math.round((countCG / strand.length) * 100);
             let survives = percentCG >= 60;
 
-            return `${survives} (${percentCG}%)`;
+            if (message) {
+
+                let str1 = `${this.specimenNum} has a ${percentCG}% chance of `
+                let str2 = `survival`;
+                return str1 + str2;
+
+            } else {
+
+                return survives; // => true || false
+
+            }
 
         },
         complementDNA() {
@@ -147,13 +162,23 @@ const pAequorFactory = (n = 1, strand) => {
     }
 }
 
+// Create the pAequor to test against in compareDNA()
+let strand2 = mockUpStrand();
 let pAequor2 = pAequorFactory(0, strand2);
 
-// Data manipulation
+let pAequorBatch = [
+    [
+        '1. Specimen',
+        '2. DNA',
+        '3. DNA to Test Commonality',
+        '4. Commonality (percent)',
+        '5. Survival',
+        '6. Complement to DNA (Item 2)'
+    ]
+];
 
-let pAequorBatch = [];
 let n = 1;
-while (n <= 90) {
+while (n <= 3) {
 
     let pAequor = pAequorFactory(n, mockUpStrand());
 
@@ -162,29 +187,44 @@ while (n <= 90) {
         [
             pAequor.specimenNum,
             pAequor.dna,
-            // pAequor.mutateDNA(),
+            pAequor2.dna,
+            pAequor.mutateDNA(),
             pAequor.compareDNA(pAequor2),
             pAequor.willLikelySurvive(),
-            // pAequor.complementDNA()
+            pAequor.complementDNA()
         ]);
 }
 
-const pAequorSorter = (sortBy = 'none') => {
+console.log(pAequorBatch);
+
+
+
+/*
+
+    Data manipulation - NOT PART OF THE EXERCISE/PROJECT
+
+*/
+
+const pAequorSorter = (sortBy) => {
+
+    let surv = pAequorBatch[0].indexOf();
 
     let byNone = pAequorBatch;
-    let bySurvivability = pAequorBatch.sort((a, b) => {
-        return +b[2].replace(/[^0-99]/g, '') - +a[2].replace(/[^0-99]/g, '');
+    let byCommonality = pAequorBatch.sort((a, b) => {
+        return +b[3].replace(/[^0-99]/g, '') - +a[3].replace(/[^0-99]/g, '');
     });
+    /*
+    let bySurvivability = pAequorBatch.sort((a, b) => {
+        return +b[4].replace(/[^0-99]/g, '') - +a[4].replace(/[^0-99]/g, '');
+    });
+    */
 
     let sortMethod = {
-        'survival': bySurvivability,
+        // 'survival': bySurvivability,
         'none': byNone,
+        'commonality': byCommonality
     }
 
     return sortMethod[sortBy];
 
 }
-
-// console.log(pAequorBatch);
-
-console.log(pAequorSorter('none'));
