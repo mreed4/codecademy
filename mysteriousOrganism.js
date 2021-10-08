@@ -13,19 +13,18 @@ const mockUpStrand = () => {
     for (let i = 0; i < 15; i++) {
         newStrand.push(returnRandBase());
     }
-    return newStrand;
+    return newStrand.join('');
 }
 
-let strand1 = mockUpStrand();
-let strand2 = mockUpStrand();
+let pAequor2 = mockUpStrand();
 
 const pAequorFactory = (n = 1, strand) => {
     return {
         specimenNum: n,
-        dna: strand.join(''),
-        mutate() {
+        dna: strand,
+        mutateDNA() {
 
-            let swapBase = { // See Line 57 comments
+            let mutateBase = {
 
                 A: {
                     1: 'T',
@@ -50,28 +49,22 @@ const pAequorFactory = (n = 1, strand) => {
 
             }
 
-            // Random base from given strand
-            // i.e. 'A', 'T', 'C', or 'G'
-            let i = Math.floor(Math.random() * strand.length);
-            let oldBase = this.dna[i];
+            let i = Math.floor(Math.random() * 3) + 1;
+            let j = Math.floor(Math.random() * this.dna.length);
 
-            /*
-            The randomly chosen base from Line 55 is used here in conjunction
-            with the 'swapBase' object farther above--i.e. if Line 54 is 'A',
-            'A' turns into either 'T', 'C', or 'G' (but not 'A' again). Or, 
-            for example, if Line 55 is 'C', 'C' turns into either 'A', 'T', 
-            or 'G' (but not 'C' again). What the randomly given base turns 
-            into is also random.
-            */
-            let j = Math.floor(Math.random() * 3) + 1;
-            let newBase = swapBase[oldBase][j];
+            // https://tinyurl.com/4zkfdfw6
+            String.prototype.replaceAt = function(index, replacement) {
+                return this.substring(0, index) +
+                    replacement +
+                    this.substring(index + 1);
+            }
 
-            /*
-            Replace random oldBase (e.g. 'A') in given strand with random newBase (e.g. 'T', 'C', or 'G')
-            */
-            this.dna[i] = newBase;
+            let originStrand = this.dna;
+            let randOriginBase = originStrand[j];
+            let randMutateBase = mutateBase[randOriginBase][i];
+            let mutatedStrand = originStrand.replaceAt(j, randMutateBase);
 
-            return strand.join(''); // This is the mutated strand
+            return mutatedStrand;
 
         },
         compareDNA(pAequor, set = false) {
@@ -137,16 +130,15 @@ const pAequorFactory = (n = 1, strand) => {
         },
         willLikelySurvive() {
 
-            let strand = this.dna;
-            let strandCG = strand.replace(/A|T/g, '');
+            let strandCG = this.dna.replace(/A|T/g, '');
             let countCG = strandCG.length;
             let percentCG = Math.round((countCG / strand.length) * 100);
-            let survival = percentCG > 60;
+            let survives = percentCG > 60;
 
-            return survival;
+            return survives;
 
         },
-        complementStrand() {
+        complementDNA() {
 
             let strand = this.dna;
 
@@ -168,21 +160,22 @@ const pAequorFactory = (n = 1, strand) => {
         }
     }
 }
+let pAequorBatch = [];
 
-let pAequor1 = pAequorFactory(1, strand1);
-let pAequor2 = pAequorFactory(2, strand2);
-// console.log(pAequor1.compareDNA(pAequor2, false));
+let n = 1;
+while (n <= 90) {
 
-let arr = []
-for (let i = 0; i <= 30; i++) {
-    let pAequor = pAequorFactory(i, mockUpStrand());
-    arr.push(
+    let pAequor = pAequorFactory(n, mockUpStrand());
+
+    n++;
+    pAequorBatch.push(
         [
             pAequor.specimenNum,
             pAequor.dna,
-            // pAequor.mutate(),
+            // pAequor.mutateDNA(),
             pAequor.willLikelySurvive(),
-            pAequor.complementStrand()
+            // pAequor.complementDNA()
         ]);
 }
-console.log(arr);
+
+console.log(pAequorBatch);
