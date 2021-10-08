@@ -171,9 +171,10 @@ let pAequorBatch = [
         '1. Specimen',
         '2. DNA',
         '3. DNA to Test Commonality',
-        '4. Commonality (percent)',
-        '5. Survival',
-        '6. Complement to DNA (Item 2)'
+        '4. Mutated DNA (Item 2)',
+        '5. Commonality (percent)',
+        '6. Survival',
+        '7. Complement to DNA (Item 2)'
     ]
 ];
 
