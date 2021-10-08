@@ -16,7 +16,7 @@ const mockUpStrand = () => {
     return newStrand.join('');
 }
 
-let pAequor2 = mockUpStrand();
+let strand2 = mockUpStrand();
 
 const pAequorFactory = (n = 1, strand) => {
     return {
@@ -146,6 +146,8 @@ const pAequorFactory = (n = 1, strand) => {
         }
     }
 }
+
+let pAequor2 = pAequorFactory(0, strand2);
 
 // Data manipulation
 
