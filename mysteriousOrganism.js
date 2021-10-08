@@ -67,7 +67,7 @@ const pAequorFactory = (n = 1, strand) => {
             return mutatedStrand;
 
         },
-        compareDNA(pAequor, set = false) {
+        compareDNA(pAequor, message = false) {
 
             let specA_DNA = this.dna; // This is the 'current' strand
             let specB_DNA = pAequor.dna; // This is the passed in strand
@@ -97,26 +97,7 @@ const pAequorFactory = (n = 1, strand) => {
             // Typecasts to number from string
             let percentSimilar = ((commonBase / divisor) * 100).toFixed(2);
 
-            /* 
-            This conditional will either return an array of strings that (a) 
-            look like numbers, (b) an array of numbers, or (c) a string
-            */
-            let uniformNum = true;
-            if (set && uniformNum) {
-
-                if (percentSimilar.length === 4) {
-                    percentSimilar = '0' + percentSimilar;
-                }
-
-                return percentSimilar;
-
-            } else if (set) {
-
-                percentSimilar = +percentSimilar;
-
-                return percentSimilar;
-
-            } else {
+            if (message) {
 
                 percentSimilar = +percentSimilar;
 
@@ -125,6 +106,11 @@ const pAequorFactory = (n = 1, strand) => {
                 let message = s1 + s2;
 
                 return message;
+
+            } else {
+
+                return `${percentSimilar}%`;
+
             }
 
         },
@@ -161,6 +147,7 @@ const pAequorFactory = (n = 1, strand) => {
     }
 }
 
+// Data manipulation
 
 let pAequorBatch = [];
 let n = 1;
@@ -174,20 +161,22 @@ while (n <= 90) {
             pAequor.specimenNum,
             pAequor.dna,
             // pAequor.mutateDNA(),
+            pAequor.compareDNA(pAequor2),
             pAequor.willLikelySurvive(),
             // pAequor.complementDNA()
         ]);
 }
 
-const pAequorSorter = (sortBy) => {
+const pAequorSorter = (sortBy = 'none') => {
 
+    let byNone = pAequorBatch;
     let bySurvivability = pAequorBatch.sort((a, b) => {
         return +b[2].replace(/[^0-99]/g, '') - +a[2].replace(/[^0-99]/g, '');
     });
 
     let sortMethod = {
         'survival': bySurvivability,
-        'none': pAequorBatch
+        'none': byNone,
     }
 
     return sortMethod[sortBy];
