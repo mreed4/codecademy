@@ -133,9 +133,9 @@ const pAequorFactory = (n = 1, strand) => {
             let strandCG = this.dna.replace(/A|T/g, '');
             let countCG = strandCG.length;
             let percentCG = Math.round((countCG / strand.length) * 100);
-            let survives = percentCG > 60;
+            let survives = percentCG >= 60;
 
-            return survives;
+            return `${survives} (${percentCG}%)`;
 
         },
         complementDNA() {
@@ -160,8 +160,9 @@ const pAequorFactory = (n = 1, strand) => {
         }
     }
 }
-let pAequorBatch = [];
 
+
+let pAequorBatch = [];
 let n = 1;
 while (n <= 90) {
 
@@ -178,4 +179,21 @@ while (n <= 90) {
         ]);
 }
 
-console.log(pAequorBatch);
+const pAequorSorter = (sortBy) => {
+
+    let bySurvivability = pAequorBatch.sort((a, b) => {
+        return +b[2].replace(/[^0-99]/g, '') - +a[2].replace(/[^0-99]/g, '');
+    });
+
+    let sortMethod = {
+        'survival': bySurvivability,
+        'none': pAequorBatch
+    }
+
+    return sortMethod[sortBy];
+
+}
+
+// console.log(pAequorBatch);
+
+console.log(pAequorSorter('none'));
