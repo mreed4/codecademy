@@ -79,7 +79,7 @@ const pAequorFactory = (specimenNum, dna) => {
             return mutatedStrand;
 
         },
-        compareDNA(pAequor /*, message = false*/ ) {
+        compareDNA(pAequor, message = false) {
 
             let specA_DNA = this.dna;
             let specB_DNA = pAequor.dna;
@@ -100,9 +100,6 @@ const pAequorFactory = (specimenNum, dna) => {
 
             let percentSimilar = ((commonBase / divisor) * 100).toFixed(2);
 
-            return `Specimen #${specA_Num} and Specimen #${specB_Num} have ${percentSimilar}% DNA in common`
-
-            /*
             if (message) {
 
                 percentSimilar = +percentSimilar;
@@ -118,33 +115,16 @@ const pAequorFactory = (specimenNum, dna) => {
                 return +percentSimilar; // => n
 
             }
-            */
 
         },
-        willLikelySurvive( /*message = false*/ ) {
+        willLikelySurvive() {
 
             let strandCG = this.dna.replace(/A|T/g, '');
             let countCG = strandCG.length;
             let percentCG = Math.round((countCG / this.dna.length) * 100);
             let survives = percentCG >= 60;
 
-            return survives; // => true || false
-
-            /*
-            if (message) {
-
-                let prettySurv = (survives) ? `Survives` : `Doesn't survive`;
-                let str1 = `${prettySurv} [Spec. ${this.specimenNum} has `
-                let str2 = `a ${percentCG}% chance of survival]`;
-
-                return str1 + str2;
-
-            } else {
-
-                return survives; // => true || false
-
-            }
-            */
+            return survives;
 
         },
         complementDNA() {
@@ -176,74 +156,83 @@ let pAequor0 = pAequorFactory(0, strand0);
 
 
 
-// Get 30 instances of organism with chance for survival
-const getSurvivors = num => {
+// Generate a list to filter 30 survivors from
+const getBatch = num => {
 
     let pAequorBatch = [];
     let i = 1;
-    while (i < num * 5) {
+    while (i <= num) {
 
         let pAequor = pAequorFactory(i, mockUpStrand());
 
         pAequorBatch.push(
             [
                 pAequor.specimenNum,
-                pAequor.dna,
                 pAequor.willLikelySurvive(),
-                // pAequor.compareDNA(pAequor0)
+                pAequor.dna,
+                pAequor0.dna,
+                pAequor.compareDNA(pAequor0),
+                // pAequor.mutateDNA(),
+                // pAequor.complementDNA()
             ]);
+
         i++;
-
-        pAequorSurvivalBatch = pAequorBatch
-            .filter(n => n[2] === true)
-            /*
-            .filter(n => {
-                if (pAequor.willLikelySurvive(this.message !== true)) {
-                    return n[2] === true;
-                } else {
-                    return n[2].includes('Survives');
-                }
-            })
-            */
-            .slice(0, num);
     }
 
-    return pAequorSurvivalBatch;
+    return pAequorBatch;
 }
 
-console.log(getSurvivors(30));
+let batch = getBatch(150);
 
-const mostRelated = (spec1, spec2) => {
+// console.log(batch);
 
-}
+const getSurvivors = (arr, count) => {
 
+    let survivors = arr
+        .filter(n => n[1] === true)
+        .slice(0, count);
 
-/*
-
-    Data manipulation - NOT PART OF THE EXERCISE/PROJECT
-
-*/
-
-const pAequorSorter = (sortBy) => {
-
-    // let surv = pAequorBatch[0].indexOf();
-
-    // let byNone = pAequorBatch;
-    let byCommonality = pAequorBatch.sort((a, b) => {
-        return +b[3].replace(/[^0-99]/g, '') - +a[3].replace(/[^0-99]/g, '');
-    });
-    /*
-    let bySurvivability = pAequorBatch.sort((a, b) => {
-        return +b[4].replace(/[^0-99]/g, '') - +a[4].replace(/[^0-99]/g, '');
-    });
-    */
-
-    let sortMethod = {
-        // 'survival': bySurvivability,
-        'none': byNone,
-        'commonality': byCommonality
-    }
-
-    return sortMethod[sortBy];
+    console.log(`
+                    S U R V I V O R S       
+                        `);
+    return survivors;
 
 }
+
+let thirtySurvivors = getSurvivors(batch, 30);
+
+console.log(thirtySurvivors);
+
+
+const mostRelated = arr => {
+
+    let sorted = arr.sort((a, b) => {
+        return b[4] - a[4];
+    })
+    console.log(`
+                S U R V I V O R S (Sorted)    
+    `);
+    console.log(sorted);
+
+    let most = sorted.slice(0, 1)[0];
+
+    let num = most[0];
+    let strandA = most[2];
+    let strandB = most[3];
+    let percent = most[4];
+
+    let s1 = `At ${percent}% common DNA, Specimen ${num} is most similar to the`
+    let s2 = ` comparison Specimen.\n[Specimen ${num}: ${strandA} => `
+    let s3 = `Comparison: ${strandB}]`
+
+    return s1 + s2 + s3
+}
+
+let related = mostRelated(thirtySurvivors);
+console.log(`
+                M O S T _ C O M M O N    
+    `);
+console.log(`${related}\n`);
+console.log(`
+                > E N D _ P R O G R A M    
+    `);
