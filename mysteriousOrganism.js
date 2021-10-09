@@ -217,31 +217,37 @@ const mostRelated = arr => {
 const finalResults = () => {
 
     let batch = getBatch(150);
-    let thirtySurvivors = getSurvivors(batch, 30);
-    let sortedSurvivors = sortSurvivors(thirtySurvivors);
-    let common = mostRelated(sortedSurvivors);
 
     console.log(`
 
                     S U R V I V O R S   
     `);
+    let thirtySurvivors = getSurvivors(batch, 30);
     console.log(thirtySurvivors);
+
+
 
     console.log(`
 
                 S U R V I V O R S (Sorted)
     `);
+    let sortedSurvivors = sortSurvivors(thirtySurvivors);
     console.log(sortedSurvivors);
 
+
+
     console.log(`
 
-                M O S T _ C O M M O N    
+                    M O S T _ C O M M O N    
     `);
+    let common = mostRelated(sortedSurvivors);
     console.log(`${common}\n`);
 
+
+
     console.log(`
 
-                > E N D _ P R O G R A M    
+                    > E N D _ P R O G R A M    
     `);
 }
 
