@@ -30,10 +30,10 @@ const mockUpStrand = () => {
 
 */
 
-const pAequorFactory = (n = 1, strand) => {
+const pAequorFactory = (specimenNum, dna) => {
     return {
-        specimenNum: n,
-        dna: strand,
+        specimenNum,
+        dna,
         mutateDNA() {
 
             let mutateBase = {
@@ -85,9 +85,7 @@ const pAequorFactory = (n = 1, strand) => {
             let specB_DNA = pAequor.dna;
             let specA_Num = this.specimenNum;
             let specB_Num = pAequor.specimenNum;
-
             let commonBase = 0;
-
             let divisor = this.dna.length; // => 15
 
             /*
@@ -123,7 +121,7 @@ const pAequorFactory = (n = 1, strand) => {
 
             let strandCG = this.dna.replace(/A|T/g, '');
             let countCG = strandCG.length;
-            let percentCG = Math.round((countCG / strand.length) * 100);
+            let percentCG = Math.round((countCG / this.dna.length) * 100);
             let survives = percentCG >= 60;
 
             if (message) {
@@ -168,21 +166,21 @@ let pAequor2 = pAequorFactory(0, strand2);
 
 let pAequorBatch = [];
 
-let n = 1;
-while (n <= 30) {
+while (pAequorBatch.length < 30) {
+
+    let n = 1;
 
     let pAequor = pAequorFactory(n, mockUpStrand());
 
-    if (pAequor.willLikelySurvive) {
+    if (pAequor.willLikelySurvive()) {
         pAequorBatch.push(
             [
                 pAequor.specimenNum,
                 pAequor.dna,
                 pAequor.willLikelySurvive()
             ]);
+        n++;
     };
-
-    n++;
 }
 
 console.log(pAequorBatch);
