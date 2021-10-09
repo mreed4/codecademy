@@ -117,17 +117,22 @@ const pAequorFactory = (specimenNum, dna) => {
             }
 
         },
-        willLikelySurvive(message = false) {
+        willLikelySurvive( /*message = false*/ ) {
 
             let strandCG = this.dna.replace(/A|T/g, '');
             let countCG = strandCG.length;
             let percentCG = Math.round((countCG / this.dna.length) * 100);
             let survives = percentCG >= 60;
 
+            return survives; // => true || false
+
+            /*
             if (message) {
 
-                let str1 = `${this.specimenNum} has a ${percentCG}% chance of `
-                let str2 = `survival`;
+                let prettySurv = (survives) ? `Survives` : `Doesn't survive`;
+                let str1 = `${prettySurv} [Spec. ${this.specimenNum} has `
+                let str2 = `a ${percentCG}% chance of survival]`;
+
                 return str1 + str2;
 
             } else {
@@ -135,6 +140,7 @@ const pAequorFactory = (specimenNum, dna) => {
                 return survives; // => true || false
 
             }
+            */
 
         },
         complementDNA() {
@@ -164,26 +170,42 @@ const pAequorFactory = (specimenNum, dna) => {
 let strand2 = mockUpStrand();
 let pAequor2 = pAequorFactory(0, strand2);
 
-let pAequorBatch = [];
 
-while (pAequorBatch.length < 30) {
+// Get 30 instances of organism with chance for survival
+const getSurvivors = num => {
 
-    let n = 1;
+    let pAequorBatch = [];
+    let i = 1;
+    while (i < num * 5) {
 
-    let pAequor = pAequorFactory(n, mockUpStrand());
+        let pAequor = pAequorFactory(i, mockUpStrand());
 
-    if (pAequor.willLikelySurvive()) {
         pAequorBatch.push(
             [
                 pAequor.specimenNum,
                 pAequor.dna,
                 pAequor.willLikelySurvive()
             ]);
-        n++;
-    };
+        i++;
+
+        pAequorSurvivalBatch = pAequorBatch
+            .filter(n => n[2] === true)
+            /*
+            .filter(n => {
+                if (pAequor.willLikelySurvive(this.message !== true)) {
+                    return n[2] === true;
+                } else {
+                    return n[2].includes('Survives');
+                }
+            })
+            */
+            .slice(0, num);
+    }
+
+    return pAequorSurvivalBatch;
 }
 
-console.log(pAequorBatch);
+console.log(getSurvivors(30));
 
 
 
