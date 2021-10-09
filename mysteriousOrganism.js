@@ -79,7 +79,7 @@ const pAequorFactory = (specimenNum, dna) => {
             return mutatedStrand;
 
         },
-        compareDNA(pAequor, message = false) {
+        compareDNA(pAequor /*, message = false*/ ) {
 
             let specA_DNA = this.dna;
             let specB_DNA = pAequor.dna;
@@ -98,8 +98,11 @@ const pAequorFactory = (specimenNum, dna) => {
                 }
             }
 
-            let percentSimilar = ((commonBase / divisor) * 100) //.toFixed(2);
+            let percentSimilar = ((commonBase / divisor) * 100).toFixed(2);
 
+            return `Specimen #${specA_Num} and Specimen #${specB_Num} have ${percentSimilar}% DNA in common`
+
+            /*
             if (message) {
 
                 percentSimilar = +percentSimilar;
@@ -115,6 +118,7 @@ const pAequorFactory = (specimenNum, dna) => {
                 return +percentSimilar; // => n
 
             }
+            */
 
         },
         willLikelySurvive( /*message = false*/ ) {
@@ -167,8 +171,9 @@ const pAequorFactory = (specimenNum, dna) => {
 }
 
 // Create the pAequor to test against in compareDNA()
-let strand2 = mockUpStrand();
-let pAequor2 = pAequorFactory(0, strand2);
+let strand0 = mockUpStrand();
+let pAequor0 = pAequorFactory(0, strand0);
+
 
 
 // Get 30 instances of organism with chance for survival
@@ -184,7 +189,8 @@ const getSurvivors = num => {
             [
                 pAequor.specimenNum,
                 pAequor.dna,
-                pAequor.willLikelySurvive()
+                pAequor.willLikelySurvive(),
+                // pAequor.compareDNA(pAequor0)
             ]);
         i++;
 
@@ -207,6 +213,9 @@ const getSurvivors = num => {
 
 console.log(getSurvivors(30));
 
+const mostRelated = (spec1, spec2) => {
+
+}
 
 
 /*
@@ -217,9 +226,9 @@ console.log(getSurvivors(30));
 
 const pAequorSorter = (sortBy) => {
 
-    let surv = pAequorBatch[0].indexOf();
+    // let surv = pAequorBatch[0].indexOf();
 
-    let byNone = pAequorBatch;
+    // let byNone = pAequorBatch;
     let byCommonality = pAequorBatch.sort((a, b) => {
         return +b[3].replace(/[^0-99]/g, '') - +a[3].replace(/[^0-99]/g, '');
     });
