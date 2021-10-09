@@ -100,7 +100,7 @@ const pAequorFactory = (n = 1, strand) => {
                 }
             }
 
-            let percentSimilar = ((commonBase / divisor) * 100).toFixed(2);
+            let percentSimilar = ((commonBase / divisor) * 100) //.toFixed(2);
 
             if (message) {
 
@@ -166,34 +166,23 @@ const pAequorFactory = (n = 1, strand) => {
 let strand2 = mockUpStrand();
 let pAequor2 = pAequorFactory(0, strand2);
 
-let pAequorBatch = [
-    [
-        '1. Specimen',
-        '2. DNA',
-        '3. DNA to Test Commonality',
-        '4. Mutated DNA (Item 2)',
-        '5. Commonality (percent)',
-        '6. Survival',
-        '7. Complement to DNA (Item 2)'
-    ]
-];
+let pAequorBatch = [];
 
 let n = 1;
-while (n <= 3) {
+while (n <= 30) {
 
     let pAequor = pAequorFactory(n, mockUpStrand());
 
+    if (pAequor.willLikelySurvive) {
+        pAequorBatch.push(
+            [
+                pAequor.specimenNum,
+                pAequor.dna,
+                pAequor.willLikelySurvive()
+            ]);
+    };
+
     n++;
-    pAequorBatch.push(
-        [
-            pAequor.specimenNum,
-            pAequor.dna,
-            pAequor2.dna,
-            pAequor.mutateDNA(),
-            pAequor.compareDNA(pAequor2),
-            pAequor.willLikelySurvive(),
-            pAequor.complementDNA()
-        ]);
 }
 
 console.log(pAequorBatch);
