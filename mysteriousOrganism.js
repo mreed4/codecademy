@@ -4,16 +4,11 @@
 
 */
 
-// Returns a random DNA base
 const returnRandBase = () => {
     const dnaBases = ['A', 'T', 'C', 'G'];
     return dnaBases[Math.floor(Math.random() * 4)];
 }
 
-/*
-Returns a single stand of DNA containing 15 bases (again, each chosen)
-at random
-*/
 const mockUpStrand = () => {
     const newStrand = [];
     for (let i = 0; i < 15; i++) {
@@ -21,7 +16,6 @@ const mockUpStrand = () => {
     }
     return newStrand.join('');
 }
-
 
 
 /*
@@ -79,12 +73,12 @@ const pAequorFactory = (specimenNum, dna) => {
             return mutatedStrand;
 
         },
-        compareDNA(pAequor, message = false) {
+        compareDNA(comparison, message = false) {
 
             let specA_DNA = this.dna;
-            let specB_DNA = pAequor.dna;
+            let specB_DNA = comparison.dna;
             let specA_Num = this.specimenNum;
-            let specB_Num = pAequor.specimenNum;
+            let specB_Num = comparison.specimenNum;
             let commonBase = 0;
             let divisor = this.dna.length; // => 15
 
@@ -150,11 +144,9 @@ const pAequorFactory = (specimenNum, dna) => {
     }
 }
 
-// Create the pAequor to test against in compareDNA()
-let strand0 = mockUpStrand();
-let pAequor0 = pAequorFactory(0, strand0);
 
 
+let pAequor0 = pAequorFactory(0, mockUpStrand());
 
 // Generate a list to filter 30 survivors from
 const getBatch = num => {
@@ -180,11 +172,8 @@ const getBatch = num => {
     }
 
     return pAequorBatch;
+
 }
-
-let batch = getBatch(150);
-
-// console.log(batch);
 
 const getSurvivors = (arr, count) => {
 
@@ -192,29 +181,23 @@ const getSurvivors = (arr, count) => {
         .filter(n => n[1] === true)
         .slice(0, count);
 
-    console.log(`
-                    S U R V I V O R S       
-                        `);
     return survivors;
 
 }
 
-let thirtySurvivors = getSurvivors(batch, 30);
-
-console.log(thirtySurvivors);
-
-
-const mostRelated = arr => {
+const sortSurvivors = arr => {
 
     let sorted = arr.sort((a, b) => {
         return b[4] - a[4];
     })
-    console.log(`
-                S U R V I V O R S (Sorted)    
-    `);
-    console.log(sorted);
 
-    let most = sorted.slice(0, 1)[0];
+    return sorted;
+
+}
+
+const mostRelated = arr => {
+
+    let most = arr.slice(0, 1)[0];
 
     let num = most[0];
     let strandA = most[2];
@@ -225,14 +208,41 @@ const mostRelated = arr => {
     let s2 = ` comparison Specimen.\n[Specimen ${num}: ${strandA} => `
     let s3 = `Comparison: ${strandB}]`
 
-    return s1 + s2 + s3
+    let message = s1 + s2 + s3;
+
+    return message;
+
 }
 
-let related = mostRelated(thirtySurvivors);
-console.log(`
+const finalResults = () => {
+
+    let batch = getBatch(150);
+    let thirtySurvivors = getSurvivors(batch, 30);
+    let sortedSurvivors = sortSurvivors(thirtySurvivors);
+    let common = mostRelated(sortedSurvivors);
+
+    console.log(`
+
+                    S U R V I V O R S   
+    `);
+    console.log(thirtySurvivors);
+
+    console.log(`
+
+                S U R V I V O R S (Sorted)
+    `);
+    console.log(sortedSurvivors);
+
+    console.log(`
+
                 M O S T _ C O M M O N    
     `);
-console.log(`${related}\n`);
-console.log(`
+    console.log(`${common}\n`);
+
+    console.log(`
+
                 > E N D _ P R O G R A M    
     `);
+}
+
+finalResults();
