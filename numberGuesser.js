@@ -3,48 +3,40 @@ let computerScore = 0;
 let currentRoundNumber = 1;
 
 // Write your code below:
+
 const generateTarget = () => {
+    return Math.floor(Math.random() * 10);
+};
 
-    return Math.floor(Math.random() * 10)
-
-}
-
-const validateHumanGuess = () => {
-
-    let validate = humanGuess < 0 || humanGuess > 9;
-
-    if (validate) {
-        alert("Your guess is out of range!");
-    }
-
-}
+const getAbsoluteDifference = (guess, target) => {
+    return Math.abs(guess - target);
+};
 
 const compareGuesses = (humanGuess, computerGuess, target) => {
-
-    validateHumanGuess();
+    if (humanGuess < 0 || humanGuess > 9) {
+        alert("PICK A NUMBER BETWEEN 0 AND 9 INCLUSIVE");
+        return;
+    }
 
     let test1 = humanGuess === computerGuess;
-
-    let h = getAbsoluteDistance(humanGuess, target);
-    let c = getAbsoluteDistance(computerGuess, target);
-    let test2 = h > c;
-
-    return (test1 || test2);
-
-}
-
-const getAbsoluteDistance = (num1, num2) => {
-
-    return Math.abs(num1 - num2);
-
-}
+    let test2 =
+        getAbsoluteDifference(humanGuess, target) <
+        getAbsoluteDifference(computerGuess, target);
+    if (test1 || test2) {
+        return true;
+    } else {
+        return false;
+    }
+};
 
 const updateScore = (winner) => {
-
-    (winner === 'human') ? humanScore++ : computerScore++;
-
-}
+    if (winner === `computer`) {
+        computerScore++;
+    } else {
+        humanScore++;
+    }
+};
 
 const advanceRound = () => {
     currentRoundNumber++;
-}
+};

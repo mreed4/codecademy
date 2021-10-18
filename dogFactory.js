@@ -27,6 +27,6 @@ const dogFactory = (_name, _breed, _weight) => {
         },
         eatTooManyTreats() {
             this.weight++;
-        }
-    }
-}
+        },
+    };
+};

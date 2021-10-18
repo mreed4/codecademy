@@ -1,14 +1,11 @@
 const _ = {
-
     clamp(number, lower, upper) {
-
         if (number < lower) return lower;
         if (number > upper) return upper;
-        return number;
 
+        return number;
     },
     inRange(number, start, end) {
-
         if (end === undefined) {
             end = start;
             start = 0;
@@ -18,13 +15,11 @@ const _ = {
             end = start;
             start = temp;
         }
-        return (number >= start && number < end);
 
+        return number >= start && number < end;
     },
     words(string) {
-
-        return string.split(' ');
-
+        return string.split(" ");
     },
     pad(string, length) {
         // 'char' omitted from the exercise instructions/requirements,
@@ -40,17 +35,14 @@ const _ = {
         let calcPadEnd = length - (calcPadStart + string.length);
         let padEnd = char.repeat(calcPadEnd);
 
-        string = padStart + string + padEnd
-        return string;
+        string = padStart + string + padEnd;
 
+        return string;
     },
     has(obj, key) {
-
-        return (obj[key] !== undefined);
-
+        return obj[key] !== undefined;
     },
     invert(obj) {
-
         // console.log(obj);
         const objInvert = {};
 
@@ -66,33 +58,27 @@ const _ = {
         }
 
         return objInvert;
-
     },
     findKey(obj, predicate) {
-
         for (let key in obj) {
-
             let value = obj[key];
             let predicateReturnValue = predicate(value);
             if (predicateReturnValue) {
                 return key;
             }
+
             return undefined;
-
         }
-
     },
     drop(arr, n = 1) {
-
         let arr2 = arr;
         for (let i = 0; i < n; i++) {
             arr2.shift();
         }
-        return arr2;
 
+        return arr2;
     },
     dropWhile(arr, predicate) {
-
         let dropNumber = arr.findIndex((element, index) => {
             return !predicate(element, index, arr);
         });
@@ -102,16 +88,14 @@ const _ = {
         return droppedArray;
     },
     chunk(arr, size = 1) {
-
         let arr2 = [];
         for (let i = 0; i < arr.length; i += size) {
             arr2.push(arr.slice(i, i + size));
         }
 
         return arr2;
-    }
-
-}
+    },
+};
 
 // Do not write or modify code below this line.
 module.exports = _;

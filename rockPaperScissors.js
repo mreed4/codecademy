@@ -44,13 +44,3 @@ const playGame = () => {
 
     return determineWinner(userChoice, computerChoice);
 };
-
-let arr = [];
-let i = 1;
-while (i < 15) {
-    let g = playGame();
-    arr.push(g);
-    i++;
-}
-
-console.log(arr);

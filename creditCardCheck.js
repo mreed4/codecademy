@@ -21,12 +21,26 @@ const mystery4 = [4, 9, 2, 9, 8, 7, 7, 1, 6, 9, 2, 1, 7, 0, 9, 3];
 const mystery5 = [4, 9, 1, 3, 5, 4, 0, 4, 6, 3, 0, 7, 2, 5, 2, 3];
 
 // An array of all the arrays above
-const batch = [valid1, valid2, valid3, valid4, valid5, invalid1, invalid2, invalid3, invalid4, invalid5, mystery1, mystery2, mystery3, mystery4, mystery5];
-
+const batch = [
+    valid1,
+    valid2,
+    valid3,
+    valid4,
+    valid5,
+    invalid1,
+    invalid2,
+    invalid3,
+    invalid4,
+    invalid5,
+    mystery1,
+    mystery2,
+    mystery3,
+    mystery4,
+    mystery5,
+];
 
 // This takes in an array of numbers, and returns a boolean value
-const validateCard = card => {
-
+const validateCard = (card) => {
     // https://content.codecademy.com/PRO/independent-practice-projects/credit-card-checker/diagrams/cc%20validator%20diagram%201.svg
 
     // Calculated using the Luhn algorithm as demonstrated above,
@@ -37,7 +51,7 @@ const validateCard = card => {
             if (i % 2 === 0) {
                 return n;
             } else {
-                n = (n * 2);
+                n = n * 2;
                 if (n > 9) {
                     return n - 9;
                 } else {
@@ -53,50 +67,46 @@ const validateCard = card => {
     let isValid = luhnNumber % 10 === 0;
 
     return isValid;
-
-}
+};
 
 // This returns an array of arrays ('cards'), but only if the cards are invalid
 // The list of all cards is set in `batch`, on Line 24
-const findInvalidCards = cards => {
-
-    return cards
-        // The commented code returns a boolean value for each card
-        /*
+const findInvalidCards = (cards) => {
+    return (
+        cards
+            // The commented code returns a boolean value for each card
+            /*
         i.e. [true, true, false] ...
         .map(n => validateCred(n))
         .filter(n => n === false);
         */
 
-    //  The below code will return the arrays where the card number is 
-    //  NOT valid, i.e. where validateCard() returns false
-        .filter(n => validateCard(n) === false)
-        .map(n => n.reverse());
+            //  The below code will return the arrays where the card number is
+            //  NOT valid, i.e. where validateCard() returns false
+            .filter((n) => validateCard(n) === false)
+            .map((n) => n.reverse())
+    );
+};
 
-}
-
-// This maps each invalid card to the issuing bank or lender, depending on the 
+// This maps each invalid card to the issuing bank or lender, depending on the
 // first number of each card
 // Again, all cards at this point are "invalid"
-const invalidCardCompanies = cards => {
-
+const invalidCardCompanies = (cards) => {
     // Map based on an object
-    let companies = cards
-        .map(card => {
-            let company = {
-                3: `Amex (American Express)`,
-                4: `Visa`,
-                5: `Mastercard`,
-                6: `Discover`
-            }
-            return company[card[0]] || `Company not found`;
-            // https://stackoverflow.com/a/9004058/15986695
-        });
+    let companies = cards.map((card) => {
+        let company = {
+            3: `Amex (American Express)`,
+            4: `Visa`,
+            5: `Mastercard`,
+            6: `Discover`,
+        };
+        return company[card[0]] || `Company not found`;
+        // https://stackoverflow.com/a/9004058/15986695
+    });
 
     // "Remove duplicates"
     return [...new Set(companies)];
-
-}
+};
 
 let invalidCards = findInvalidCards(batch);
 
